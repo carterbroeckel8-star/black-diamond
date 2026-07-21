@@ -3431,7 +3431,7 @@ function SignIn({ onBack, onComplete }) {
     setErr("");
     const { error } = await supabase.auth.signInWithOtp({
       email: email.trim(),
-      options: { emailRedirectTo: "https://63g2dd.csb.app" },
+      options: { emailRedirectTo: window.location.origin },
     });
     setBusy(false);
     if (error) setErr(error.message);

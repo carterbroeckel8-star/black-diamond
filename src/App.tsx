@@ -3531,7 +3531,7 @@ function SignIn({ onBack, onComplete }) {
         <br />
         IN
       </div>
-      {!sent ? (
+      <button onClick={async () => { await supabase.auth.signInWithOAuth({ provider: "google", options: { redirectTo: window.location.origin } }); }} style={{ width: "100%", padding: "16px", background: "#fff", border: "none", borderRadius: 14, color: "#000", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: S, marginBottom: 16 }}>Continue with Google</button><div style={{ display: "flex", alignItems: "center", gap: 10, margin: "4px 0 20px" }}><div style={{ flex: 1, height: 1, background: "rgba(255,255,255,0.12)" }} /><span style={{ fontSize: 11, color: "rgba(255,255,255,0.35)", fontFamily: M }}>OR</span><div style={{ flex: 1, height: 1, background: "rgba(255,255,255,0.12)" }} /></div>{!sent ? (
         <>
           <div
             style={{

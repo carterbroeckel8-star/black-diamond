@@ -122,7 +122,7 @@ const INIT_ANTI = [
     id: 10,
     name: "No late nights",
     color: "#F06292",
-    guarded: genLog(0.55),
+    guarded: {},
     conflict: "Staying up past midnight kills your recovery.",
     icon: "🌙",
   },
@@ -130,7 +130,7 @@ const INIT_ANTI = [
     id: 11,
     name: "No junk food",
     color: "#FF8A65",
-    guarded: genLog(0.62),
+    guarded: {},
     conflict: "Every bad meal votes for who you used to be.",
     icon: "🍕",
   },
@@ -4296,7 +4296,7 @@ export default function App() {
     // eslint-disable-next-line
   }, [session]);
 
-  const now = new Date(),
+  const [members, setMembers] = useState([]); useEffect(() => { let cancelled = false; async function loadHabits() { const me = session && session.user; if (!me) return; const { data: rows } = await supabase.from("habits").select("*").eq("user_id", me.id); if (!rows) return; const { data: logRows } = await supabase.from("habit_logs").select("habit_id, log_date").eq("user_id", me.id); const logsByHabit = {}; (logRows || []).forEach((r) => { if (!logsByHabit[r.habit_id]) logsByHabit[r.habit_id] = {}; logsByHabit[r.habit_id][r.log_date] = true; }); const build = rows.filter((r) => !r.is_anti).map((r) => ({ id: r.id, name: r.name, color: r.color, log: logsByHabit[r.id] || {}, identity: r.identity || "", stack: r.cue || "", blueprint: { type: r.kind || "build", identity: r.identity || "", cue: r.cue || "", attractive: "", easy: "", satisfying: "" } })); if (!cancelled) setHabits(build); } loadHabits(); return () => { cancelled = true; }; }, [session && session.user && session.user.id]); useEffect(() => { let cancelled = false; async function loadLeaderboard() { const me = session && session.user; if (!me) { setMembers([]); return; } const palette = ["#4FC3F7", "#81C784", "#FFB74D", "#F06292", "#BA68C8", "#4DB6AC", "#FFD54F", "#E57373"]; const cutoffKey = dateKey(getOffset(45)); let uids = [me.id]; let capId = me.id; if (myGroup && myGroup.id) { const { data: memRows } = await supabase.from("squad_members").select("user_id").eq("squad_id", myGroup.id); if (memRows && memRows.length) uids = memRows.map((r) => r.user_id); capId = myGroup.createdBy || me.id; } const { data: profRows } = await supabase.from("profiles").select("id, name").in("id", uids); const nameMap = {}; (profRows || []).forEach((p) => { nameMap[p.id] = p.name; }); const results = await Promise.all(uids.map(async (uid, idx) => { const { data: logRows } = await supabase.from("habit_logs").select("log_date").eq("user_id", uid).gte("log_date", cutoffKey); const dates = new Set((logRows || []).map((r) => r.log_date)); let i = dates.has(dateKey(getOffset(0))) ? 0 : 1; let streak = 0; while (dates.has(dateKey(getOffset(i)))) { streak++; i++; } let thisWeek = 0; let lastWeek = 0; for (let j = 0; j < 7; j++) { if (dates.has(dateKey(getOffset(j)))) thisWeek++; } for (let j = 7; j < 14; j++) { if (dates.has(dateKey(getOffset(j)))) lastWeek++; } const pct = Math.round((thisWeek / 7) * 100); return { id: uid, name: nameMap[uid] || (uid === me.id ? (myName || "You") : "Member"), pct, streak, votes: (logRows || []).length, trend: thisWeek >= lastWeek ? "up" : "down", color: palette[idx % palette.length], isYou: uid === me.id, isCap: uid === capId }; })); if (!cancelled) setMembers(results); } loadLeaderboard(); return () => { cancelled = true; }; }, [session && session.user && session.user.id, myGroup && myGroup.id, habits, anti]); const now = new Date(),
     dow = now.getDay();
   const wDays = Array.from({ length: 7 }, (_, i) => {
     const d = new Date(now);
@@ -4328,7 +4328,7 @@ export default function App() {
   const milestoneProg = Math.round(
     ((totalVotes - prevMilestone) / (nextMilestone - prevMilestone)) * 100
   );
-  const sorted = [...MEMBERS].sort((a, b) => b.pct - a.pct);
+  const sorted = [...(members.length ? members : [{ id: "you", name: myName || "You", pct: 0, streak: 0, votes: 0, trend: "up", color: "#4FC3F7", isYou: true, isCap: true }])].sort((a, b) => b.pct - a.pct);
   const PD = 14;
 
   const bg = darkMode

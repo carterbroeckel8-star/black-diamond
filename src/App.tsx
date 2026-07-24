@@ -630,7 +630,7 @@ function GuardItem({ h, guarded, onGuard, onBreak, onDetail }) {
   );
 }
 
-function Flash({ text, color, guard, onDone }) {
+function LightBurst({ color, onDone }) { const [show, setShow] = useState(true); useEffect(() => { const fade = setTimeout(() => setShow(false), 50); const done = setTimeout(onDone, 650); return () => { clearTimeout(fade); clearTimeout(done); }; }, []); return (<div style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 85, background: `radial-gradient(circle at 50% 50%, ${color}66, transparent 65%)`, opacity: show ? 1 : 0, transition: "opacity 0.6s ease-out" }} />); } function Flash({ text, color, guard, onDone }) {
   useEffect(() => {
     const t = setTimeout(onDone, 2200);
     return () => clearTimeout(t);

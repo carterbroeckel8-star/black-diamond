@@ -4483,8 +4483,8 @@ export default function App() {
     setShowReclaim(false);
     showToast("Reclaim system added. Hold it daily.");
   }
-  function completeBuild(data) {
-    const newId = Math.max(0, ...habits.map((h) => h.id)) + 1;
+  async function completeBuild(data) {
+    let __realHabitId = null; const __sbUser3 = session && session.user; if (__sbUser3) { try { const { data: newHabitRow } = await supabase.from("habits").insert({ user_id: __sbUser3.id, name: data.shortName, color: data.color, kind: data.kind, statement: data.statement, identity: data.identity, cue: data.cue, bad_habit: data.badHabit, anchor: data.anchor, days: data.days, goal_count: data.goalCount, goal_unit: data.goalUnit, habit_time: data.habitTime, reminder: data.reminder, is_anti: false }).select().single(); if (newHabitRow) __realHabitId = newHabitRow.id; } catch (e) {} } const newId = __realHabitId || (Math.max(0, ...habits.map((h) => h.id)) + 1);
     setHabits((p) => [
       ...p,
       {

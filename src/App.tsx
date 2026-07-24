@@ -4414,7 +4414,7 @@ export default function App() {
     };
     reader.readAsDataURL(file);
   }
-  function doHabit(id) {
+  async function doHabit(id) { const __sbUser = session && session.user;
     const h = habits.find((h) => h.id === id);
     if (!h) return;
     setHabits((p) =>
@@ -4423,9 +4423,9 @@ export default function App() {
       )
     );
     setBurst(h.color);
-    setFlash({ text: h.identity, color: h.color, guard: false });
+    setFlash({ text: h.identity, color: h.color, guard: false }); if (__sbUser) { try { await supabase.from("habit_logs").insert({ habit_id: h.id, user_id: __sbUser.id, log_date: TODAY }); } catch (e) {} } if (__sbUser) { try { await supabase.from("habit_logs").insert({ habit_id: h.id, user_id: __sbUser.id, log_date: TODAY }); } catch (e) {} }
   }
-  function undoHabit(id) {
+  async function undoHabit(id) { const __sbUser2 = session && session.user; if (__sbUser2) { try { await supabase.from("habit_logs").delete().eq("habit_id", id).eq("log_date", TODAY); } catch (e) {} }
     setHabits((p) =>
       p.map((x) =>
         x.id !== id ? x : { ...x, log: { ...x.log, [TODAY]: false } }

@@ -6211,6 +6211,44 @@ export default function App() {
               </div>
             )}
           </div>
+          {tab === "plan" && (
+          <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 88, overflowY: "auto", padding: "16px 18px" }}>
+            <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
+              <button onClick={() => setScheduleDate(dateKey(new Date()))} style={{ flex: 1, padding: "8px 0", borderRadius: 10, border: "none", background: scheduleDate === dateKey(new Date()) ? T.ac : T.card, color: scheduleDate === dateKey(new Date()) ? T.acTx : T.tx, fontWeight: 700, fontSize: 12 }}>Today</button>
+              <button onClick={() => setScheduleDate(dateKey(getOffset(-1)))} style={{ flex: 1, padding: "8px 0", borderRadius: 10, border: "none", background: scheduleDate === dateKey(getOffset(-1)) ? T.ac : T.card, color: scheduleDate === dateKey(getOffset(-1)) ? T.acTx : T.tx, fontWeight: 700, fontSize: 12 }}>Tonight (Tomorrow)</button>
+            </div>
+            <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "1px", textTransform: "uppercase", color: T.txH, marginBottom: 8 }}>Unscheduled</div>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 20 }}>
+              {habits.filter((h) => !schedule[h.id]).map((h) => (
+            <div key={h.id} style={{ display: "flex", alignItems: "center", gap: 6, background: T.card, borderRadius: 20, padding: "6px 12px" }}>
+              <span style={{ width: 8, height: 8, borderRadius: 4, background: h.color }} />
+              <span style={{ fontSize: 13, color: T.tx }}>{h.name}</span>
+              <input type="time" onChange={(e) => e.target.value && setHabitPlanTime(h.id, e.target.value)} style={{ background: "none", border: "none", color: T.ac, fontSize: 12, fontWeight: 700 }} />
+            </div>
+            ))}
+              {!habits.length && (
+            <div style={{ fontSize: 13, color: T.txH }}>Build a habit first, then plan when you'll do it.</div>
+            )}
+            </div>
+            <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "1px", textTransform: "uppercase", color: T.txH, marginBottom: 8 }}>Your Roadmap</div>
+            {Object.entries(schedule).filter(([hid]) => habits.some((h) => String(h.id) === String(hid))).sort((a, b) => a[1].localeCompare(b[1])).map(([hid, time]) => {
+            const h = habits.find((x) => String(x.id) === String(hid));
+            if (!h) return null;
+            return (
+              <div key={hid} style={{ display: "flex", alignItems: "center", gap: 10, background: T.card, borderRadius: 12, padding: "10px 14px", marginBottom: 8 }}>
+                <span style={{ fontSize: 13, fontWeight: 700, color: T.ac, width: 56 }}>{time}</span>
+                <span style={{ width: 8, height: 8, borderRadius: 4, background: h.color }} />
+                <span style={{ fontSize: 13, color: T.tx, flex: 1 }}>{h.name}</span>
+                <input type="time" defaultValue={time} onChange={(e) => e.target.value && setHabitPlanTime(h.id, e.target.value)} style={{ background: "none", border: "none", color: T.txH, fontSize: 12 }} />
+                <button onClick={() => clearHabitPlanTime(h.id)} style={{ background: "none", border: "none", color: T.txH, fontSize: 16, cursor: "pointer" }}>×</button>
+              </div>
+              );
+          })}
+            {!Object.keys(schedule).length && (
+            <div style={{ fontSize: 13, color: T.txH }}>Nothing on the clock yet — pick a time above for each habit.</div>
+            )}
+          </div>
+          )}
 
           {/* NAV */}
           <div

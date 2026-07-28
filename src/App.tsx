@@ -4279,6 +4279,34 @@ export default function App() {
     } catch (e) {}
   }, [screen, myName, myGroup, habits, anti, myAvatar, darkMode, notifOn]);
   const [session, setSession] = useState(null);
+  const [scheduleDate, setScheduleDate] = useState(dateKey(new Date()));
+  const [schedule, setSchedule] = useState({});
+  useEffect(() => {
+    let cancelled = false;
+    async function loadSchedule() {
+      const me = session && session.user;
+      if (!me) { setSchedule({}); return; }
+      const { data: rows } = await supabase.from("habit_schedule").select("habit_id, planned_time").eq("plan_date", scheduleDate);
+      if (cancelled) return;
+      const map = {};
+      (rows || []).forEach((r) => { map[r.habit_id] = r.planned_time; });
+      setSchedule(map);
+    }
+    loadSchedule();
+    return () => { cancelled = true; };
+  }, [session && session.user && session.user.id, scheduleDate]);
+  async function setHabitPlanTime(habitId, time) {
+    const me = session && session.user;
+    if (!me) return;
+    setSchedule((prev) => ({ ...prev, [habitId]: time }));
+    await supabase.from("habit_schedule").upsert({ habit_id: habitId, user_id: me.id, plan_date: scheduleDate, planned_time: time }, { onConflict: "habit_id,plan_date" });
+  }
+  async function clearHabitPlanTime(habitId) {
+    const me = session && session.user;
+    if (!me) return;
+    setSchedule((prev) => { const next = { ...prev }; delete next[habitId]; return next; });
+    await supabase.from("habit_schedule").delete().eq("habit_id", habitId).eq("plan_date", scheduleDate).eq("user_id", me.id);
+  }
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => setSession(data.session));
     const { data: authSub } = supabase.auth.onAuthStateChange((_e, s) =>
@@ -6201,7 +6229,7 @@ export default function App() {
             {[
               { v: "today", label: "Today", i: "◎" },
               { v: "group", label: "Squad", i: "◉" },
-              { v: "chat", label: "Chat", i: "◎" }, { v: "progress", label: "Progress", i: "↗" },
+              { v: "chat", label: "Chat", i: "◎" }, { v: "plan", label: "Plan", i: "◷" }, { v: "progress", label: "Progress", i: "↗" },
               { v: "settings", label: "Settings", i: "⚙" },
             ].map(({ v, label, i }) => (
               <button

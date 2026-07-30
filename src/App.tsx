@@ -4932,7 +4932,7 @@ export default function App() {
           </div>
 
           {/* ── CONTENT ── */}
-          <div style={{ flex: 1, overflowY: "auto", paddingBottom: 88 }}>
+          <div style={{ flex: 1, overflowY: "auto", paddingBottom: 88, minHeight: 0 }}>
             {/* TODAY */}
             {tab === "today" && (
               <div>

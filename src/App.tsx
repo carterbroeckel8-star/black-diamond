@@ -6210,9 +6210,8 @@ export default function App() {
                 </div>
               </div>
             )}
-          </div>
           {tab === "plan" && (
-          <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 88, overflowY: "auto", padding: "16px 18px" }}>
+                  <div style={{ padding: "16px 18px" }}>
             <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
               <button onClick={() => setScheduleDate(dateKey(new Date()))} style={{ flex: 1, padding: "8px 0", borderRadius: 10, border: "none", background: scheduleDate === dateKey(new Date()) ? T.ac : T.card, color: scheduleDate === dateKey(new Date()) ? T.acTx : T.tx, fontWeight: 700, fontSize: 12 }}>Today</button>
               <button onClick={() => setScheduleDate(dateKey(getOffset(-1)))} style={{ flex: 1, padding: "8px 0", borderRadius: 10, border: "none", background: scheduleDate === dateKey(getOffset(-1)) ? T.ac : T.card, color: scheduleDate === dateKey(getOffset(-1)) ? T.acTx : T.tx, fontWeight: 700, fontSize: 12 }}>Tonight (Tomorrow)</button>
@@ -6249,6 +6248,7 @@ export default function App() {
             )}
           </div>
           )}
+          </div>
 
           {/* NAV */}
           <div

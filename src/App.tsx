@@ -4674,6 +4674,7 @@ export default function App() {
         @keyframes slideUp{0%{transform:translateY(100%)}100%{transform:translateY(0)}}
         @keyframes slideProg{0%{width:0%}100%{width:100%}}
         *{box-sizing:border-box}::-webkit-scrollbar{display:none}
+        @media (max-width:600px){#root>div{padding:0!important;min-height:100dvh!important}#root>div>div{width:100%!important;max-width:100%!important;height:100dvh!important;min-height:100dvh!important;max-height:100dvh!important;border-radius:0!important;border:none!important;box-shadow:none!important}}
       `}</style>
       <div
         style={{

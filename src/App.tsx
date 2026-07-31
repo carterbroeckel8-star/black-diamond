@@ -4562,7 +4562,7 @@ export default function App() {
           {screen === "signin" && (
             <SignIn
               onBack={() => setScreen("welcome")}
-              onComplete={() => setScreen("onboarding")}
+              onComplete={() => setScreen("app")}
             />
           )}
           {screen === "onboarding" && (

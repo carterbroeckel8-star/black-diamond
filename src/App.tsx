@@ -2879,13 +2879,9 @@ function ReclaimFlow({ onComplete, onCancel, T, darkMode }) {
             style={inp}
           />
           <button
-            onClick={() =>
-              oldIdentity.trim() && newIdentity.trim() && setStep(5)
-            }
-            style={prim(
-              oldIdentity.trim().length > 0 && newIdentity.trim().length > 0
-            )}
-          >
+                        onClick={() => oldIdentity.trim() && setStep(5)}
+                        style={prim(oldIdentity.trim().length > 0)}
+            >
             Continue →
           </button>
         </div>

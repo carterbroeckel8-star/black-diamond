@@ -4660,7 +4660,7 @@ export default function App() {
                     marginTop: 2,
                   }}
                 >
-                  {myGroup.name} · 4 members
+                  {myGroup ? `${myGroup.name} · 4 members` : "No squad yet — join one in Settings"}
                 </div>
               </div>
               <div
@@ -5087,7 +5087,7 @@ export default function App() {
             )}
 
             {/* SQUAD */}
-            {tab === "group" && (
+            {tab === "group" && myGroup && (
               <div>
                 <div
                   style={{

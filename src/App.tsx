@@ -4158,7 +4158,7 @@ export default function App() {
   const [myGroup, setMyGroup] = useState(SAVED.myGroup ?? GROUP);
   const [sqChoice, setSqChoice] = useState("create"); const [sqName, setSqName] = useState(""); const [sqCode, setSqCode] = useState("");
   const [habits, setHabits] = useState(SAVED.habits ?? INIT_HABITS);
-  const [anti, setAnti] = useState(SAVED.anti ?? INIT_ANTI);
+  const [anti, setAnti] = useState(SAVED.anti ?? []);
   const [flash, setFlash] = useState(null);
   const [burst, setBurst] = useState(null);
   const [detailHabit, setDetailHabit] = useState(null);

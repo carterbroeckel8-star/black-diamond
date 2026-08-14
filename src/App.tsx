@@ -6180,7 +6180,7 @@ export default function App() {
             {[
               { v: "today", label: "Today", i: "◎" },
               { v: "group", label: "Squad", i: "◉" },
-              { v: "chat", label: "Chat", i: "◎" }, { v: "plan", label: "Plan", i: "◷" }, { v: "progress", label: "Progress", i: "↗" },
+              { v: "chat", label: "Chat", i: "◎" }, { v: "progress", label: "Progress", i: "↗" },
               { v: "settings", label: "Settings", i: "⚙" },
             ].map(({ v, label, i }) => (
               <button

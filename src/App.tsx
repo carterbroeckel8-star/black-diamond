@@ -727,7 +727,7 @@ function LineChart({ values, color }) {
   );
 }
 
-function HabitDetail({ h, isAnti, onClose, onSaveBlueprint, T, darkMode }) {
+function HabitDetail({ h, isAnti, onClose, onSaveBlueprint, onDelete, T, darkMode }) {
   const M = "'DM Mono',monospace";
   const F = "'Bebas Neue',sans-serif";
   const S = "'Syne',sans-serif";
@@ -909,6 +909,7 @@ function HabitDetail({ h, isAnti, onClose, onSaveBlueprint, T, darkMode }) {
           >
             {editing ? "Save" : "Edit system"}
           </button>
+          <button onClick={() => onDelete && onDelete(h.id, isAnti)} style={{ background: "none", border: "none", color: "#F06292", fontSize: 12, fontWeight: 700, cursor: "pointer", padding: 0 }}>Delete</button>
         </div>
         <div
           style={{
@@ -4308,6 +4309,7 @@ export default function App() {
     setToastOn(true);
     setTimeout(() => setToastOn(false), 2400);
   }
+  async function deleteHabit(id, antiFlag) { const ok = window.confirm(antiFlag ? "Delete this reclaim habit?" : "Delete this habit for the whole squad? This cannot be undone."); if (!ok) return; setDetailHabit(null); if (antiFlag) { setAnti((p) => p.filter((x) => x.id !== id)); showToast("Reclaim habit deleted."); return; } setHabits((p) => p.filter((x) => x.id !== id)); try { await supabase.from("habit_logs").delete().eq("habit_id", id); await supabase.from("habits").delete().eq("id", id); } catch (e) {} showToast("Habit deleted."); }
   async function joinOrCreateSquad() { const { data: authData } = await supabase.auth.getUser(); const user = authData && authData.user; if (!user) return; let groupRow = null; if (sqChoice === "create") { if (!sqName.trim()) { showToast("Enter a squad name."); return; } const code = (sqName.replace(/[^A-Za-z]/g, "").slice(0, 5).toUpperCase() || "SQUAD") + Math.floor(Math.random() * 9 + 1); const { data: newSquad } = await supabase.from("squads").insert({ name: sqName, invite_code: code, created_by: user.id }).select().single(); if (newSquad) { await supabase.from("squad_members").insert({ squad_id: newSquad.id, user_id: user.id }); groupRow = { id: newSquad.id, name: newSquad.name, code: newSquad.invite_code, createdBy: user.id, identity: "We show up for each other, every single day." }; } } else { const cleanCode = sqCode.trim().toUpperCase(); const { data: foundSquad } = await supabase.from("squads").select("*").eq("invite_code", cleanCode).maybeSingle(); if (foundSquad) { await supabase.from("squad_members").insert({ squad_id: foundSquad.id, user_id: user.id }); groupRow = { id: foundSquad.id, name: foundSquad.name, code: foundSquad.invite_code, createdBy: foundSquad.created_by, identity: "We show up for each other, every single day." }; } else { showToast("Squad code not found. Double check and try again."); return; } } if (groupRow) { setMyGroup(groupRow); showToast("You're in! Welcome to the squad."); } }
   async function finishOnboarding(data) { setMyName(data.name); const { data: authData } = await supabase.auth.getUser(); const user = authData && authData.user; if (user) { await supabase.from("profiles").update({ name: data.name }).eq("id", user.id); } let groupRow = null; if (data.squadChoice === "create" && user) { const code = (data.squadName.replace(/[^A-Za-z]/g, "").slice(0, 5).toUpperCase() || "SQUAD") + Math.floor(Math.random() * 9 + 1); const { data: newSquad } = await supabase.from("squads").insert({ name: data.squadName, invite_code: code, created_by: user.id }).select().single(); if (newSquad) { await supabase.from("squad_members").insert({ squad_id: newSquad.id, user_id: user.id }); groupRow = { id: newSquad.id, name: newSquad.name, code: newSquad.invite_code, createdBy: user.id, identity: "We show up for each other, every single day." }; } } else if (data.squadChoice === "join" && user) { const cleanCode = data.squadCode.trim().toUpperCase(); const { data: foundSquad } = await supabase.from("squads").select("*").eq("invite_code", cleanCode).maybeSingle(); if (foundSquad) { await supabase.from("squad_members").insert({ squad_id: foundSquad.id, user_id: user.id }); groupRow = { id: foundSquad.id, name: foundSquad.name, code: foundSquad.invite_code, createdBy: foundSquad.created_by, identity: "We show up for each other, every single day." }; } else { showToast("Squad code not found. Double check with your captain."); } } if (groupRow) setMyGroup(groupRow); const firstHabit = { id: Date.now(), name: data.behavior, color: data.habitColor, log: {}, identity: data.identity, stack: data.cue, blueprint: { type: "build", identity: data.identity, cue: data.cue, attractive: "", easy: "", satisfying: "" } }; if (user) { const { data: newHabitRow } = await supabase.from("habits").insert({ user_id: user.id, name: firstHabit.name, color: firstHabit.color, kind: "build", identity: firstHabit.identity, cue: firstHabit.stack, is_anti: false }).select().single(); if (newHabitRow) firstHabit.id = newHabitRow.id; } setHabits([firstHabit]); setScreen("app"); } function __oldFinishOnboarding_unused(data) {
     setMyName(data.name);
@@ -6227,6 +6229,7 @@ export default function App() {
               isAnti={detailHabit.isAnti}
               onClose={() => setDetailHabit(null)}
               onSaveBlueprint={updateBlueprint}
+              onDelete={deleteHabit}
               T={T}
               darkMode={darkMode}
             />

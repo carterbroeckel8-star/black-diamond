@@ -229,7 +229,7 @@ function HabitCard({ h, done, onDone, onUndo }) {
       onTouchEnd={endHold}
       style={{
         width: "100%",
-        height: 210,
+        height: 124,
         borderRadius: 22,
         position: "relative",
         flexShrink: 0,
@@ -309,7 +309,7 @@ function HabitCard({ h, done, onDone, onUndo }) {
           style={{
             position: "absolute",
             inset: 0,
-            padding: "20px 22px",
+            padding: "14px 18px",
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
@@ -322,19 +322,19 @@ function HabitCard({ h, done, onDone, onUndo }) {
               letterSpacing: "1.5px",
               textTransform: "uppercase",
               color: "rgba(255,255,255,0.22)",
-              marginBottom: 10,
+              marginBottom: 7,
             }}
           >
             {h.stack}
           </div>
           <div
             style={{
-              fontSize: 30,
+              fontSize: 23,
               fontWeight: 900,
               color: done ? "rgba(255,255,255,0.4)" : "#fff",
               lineHeight: 1.05,
               letterSpacing: "-0.5px",
-              marginBottom: 12,
+              marginBottom: 8,
               textDecoration: done ? "line-through" : "none",
             }}
           >

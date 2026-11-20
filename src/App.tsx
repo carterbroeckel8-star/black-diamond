@@ -368,20 +368,20 @@ function HabitCard({ h, done, onDone, onUndo }) {
         <div
           style={{
             position: "absolute",
-            top: 12,
-            right: 12,
-            background: "rgba(0,0,0,0.55)",
+            bottom: 11,
+            left: 18,
+            background: "none",
             border: `1px solid ${
-              streak > 0 ? h.color + "40" : "rgba(255,255,255,0.08)"
+              "transparent"
             }`,
             borderRadius: 12,
-            padding: "6px 10px",
-            textAlign: "center",
+            padding: 0,
+            display: "flex", alignItems: "baseline", gap: 4,
           }}
         >
           <div
             style={{
-              fontSize: 22,
+              fontSize: 13,
               fontWeight: 900,
               lineHeight: 1,
               color: streak > 0 ? h.color : "rgba(255,255,255,0.25)",

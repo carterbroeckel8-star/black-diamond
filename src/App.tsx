@@ -309,7 +309,7 @@ function HabitCard({ h, done, onDone, onUndo }) {
           style={{
             position: "absolute",
             inset: 0,
-            padding: "14px 18px",
+            padding: "13px 18px 30px",
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
@@ -333,7 +333,7 @@ function HabitCard({ h, done, onDone, onUndo }) {
               fontWeight: 900,
               color: done ? "rgba(255,255,255,0.4)" : "#fff",
               lineHeight: 1.05,
-              letterSpacing: "-0.5px",
+              letterSpacing: "-0.5px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis",
               marginBottom: 8,
               textDecoration: done ? "line-through" : "none",
             }}

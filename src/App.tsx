@@ -5572,6 +5572,7 @@ export default function App() {
                     </div>
                   </div>
                 </div>
+                <div style={{ margin: "0 16px 10px" }}><div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 6 }}><span style={{ fontFamily: M, fontSize: 9, fontWeight: 700, letterSpacing: "1.5px", color: T.txH }}>VOTES PER DAY</span><span style={{ fontFamily: M, fontSize: 9, color: T.txM }}>LAST 14 DAYS</span></div><div style={{ background: T.sf, border: "1px solid " + T.br, borderRadius: 15, padding: "14px 14px 10px" }}><div style={{ display: "flex", alignItems: "flex-end", gap: 4, height: 72 }}>{Array.from({ length: PD }, (_, i) => { const dk = dateKey(getOffset(PD - 1 - i)); const c = habits.filter((h) => h.log[dk]).length; const pct = habits.length ? (c / habits.length) * 100 : 0; return (<div key={dk} style={{ flex: 1, height: Math.max(6, pct) + "%", background: i >= PD - 7 ? "#4FC3F7" : T.txM, borderRadius: 3 }} />); })}</div><div style={{ display: "flex", justifyContent: "space-between", marginTop: 9 }}><span style={{ fontFamily: M, fontSize: 8, color: T.txM }}>Last week</span><span style={{ fontFamily: M, fontSize: 8, color: "#4FC3F7" }}>This week</span></div></div></div>
                 {habits.map((h) => {
                   const vals = Array.from({ length: PD }, (_, i) =>
                     h.log[dateKey(getOffset(PD - 1 - i))] ? 100 : 0

@@ -5109,7 +5109,7 @@ export default function App() {
                       marginBottom: 3,
                     }}
                   >
-                    {myGroup.name} · {myGroup.code}
+                    {myGroup?.name || "No squad"} · {myGroup?.code || "----"}
                   </div>
                   <div
                     style={{
@@ -5119,7 +5119,7 @@ export default function App() {
                       lineHeight: 1.6,
                     }}
                   >
-                    "{myGroup.identity}"
+                    "{myGroup?.identity || "Join or create a squad in Settings."}"
                   </div>
                 </div>
                 <div
@@ -5894,7 +5894,7 @@ export default function App() {
                       <div
                         style={{ fontFamily: M, fontSize: 10, color: T.txH }}
                       >
-                        captain · {myGroup.name}
+                        captain · {myGroup?.name || "no squad"}
                       </div>
                     </div>
                     <button
@@ -6006,7 +6006,7 @@ export default function App() {
                       marginBottom: 3,
                     }}
                   >
-                    {myGroup.name}
+                    {myGroup?.name || "No squad yet"}
                   </div>
                   <div
                     style={{
@@ -6017,7 +6017,7 @@ export default function App() {
                       marginBottom: 10,
                     }}
                   >
-                    "{myGroup.identity}"
+                    "{myGroup?.identity || "Your squad's shared standard appears here."}"
                   </div>
                   <div
                     style={{
@@ -6037,7 +6037,7 @@ export default function App() {
                         letterSpacing: 4,
                       }}
                     >
-                      {myGroup.code}
+                      {myGroup?.code || "----"}
                     </div>
                   </div>
                   <button

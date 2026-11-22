@@ -4156,9 +4156,9 @@ export default function App() {
   })();
   const [screen, setScreen] = useState(SAVED.onboarded ? "app" : "splash");
   const [myName, setMyName] = useState(SAVED.myName ?? "Carter");
-  const [myGroup, setMyGroup] = useState(SAVED.myGroup ?? GROUP);
+  const [myGroup, setMyGroup] = useState(SAVED.myGroup ?? null);
   const [sqChoice, setSqChoice] = useState("create"); const [sqName, setSqName] = useState(""); const [sqCode, setSqCode] = useState("");
-  const [habits, setHabits] = useState(SAVED.habits ?? INIT_HABITS);
+  const [habits, setHabits] = useState(SAVED.habits ?? []);
   const [anti, setAnti] = useState(SAVED.anti ?? []);
   const [flash, setFlash] = useState(null);
   const [burst, setBurst] = useState(null);
@@ -4660,7 +4660,7 @@ export default function App() {
                     marginTop: 2,
                   }}
                 >
-                  {myGroup ? `${myGroup.name} · 4 members` : "No squad yet — join one in Settings"}
+                  {myGroup ? `${myGroup.name} · ${Math.max(1, members.length)} member${Math.max(1, members.length) === 1 ? "" : "s"}` : "No squad yet — join one in Settings"}
                 </div>
               </div>
               <div
@@ -6027,7 +6027,7 @@ export default function App() {
                     }}
                   >
                     <div style={{ fontFamily: M, fontSize: 10, color: T.txH }}>
-                      4 members
+                      {Math.max(1, members.length)} member{Math.max(1, members.length) === 1 ? "" : "s"}
                     </div>
                     <div
                       style={{
